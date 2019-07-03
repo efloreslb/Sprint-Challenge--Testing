@@ -41,14 +41,29 @@ describe('POST /games', () => {
    });
 
    it('should return status 201 when data correct', async () => {
+      const res = await request(server)
+         .post('/games')
+         .send({ title: 'Pacman', genre: 'Arcade', releaseYear: 1980 })
 
+      expect(res.status).toBe(201);
    })
 
    it('should return status 422 when data incorrect', async () => {
+      const res = await request(server)
+         .post('/games')
+         .send({ title: 'Pacman', releaseYear: 1980 })
 
+      expect(res.status).toBe(422);
    })
 
    it('should insert videogame', async () => {
+      const res = await request(server)
+         .post('/games')
+         .send({ title: 'Pacman', genre: 'Arcade', releaseYear: 1980 })
 
+      const videogames = await db('videogames');
+
+      expect(videogames).toHaveLength(1);
+      expect(videogames[0].title).toBe('Pacman');
    })
 })
