@@ -19,19 +19,23 @@ describe('GET /games', () => {
       expect(res.status).toBe(200);
    })
 
-   it('should return array', async () => {
+   it('should return empty array by default', async () => {
       const res = await request(server).get('/games');
       expect(res.body).toEqual([]);
    })
 
-   xit('should return test data', async () => {
-      const res = await request(server).get('/games');
+   it('should return test data', async () => {
       const testData = {
+         id: 1,
          title: 'Pacman',
          genre: 'Arcade',
          releaseYear: 1980
       }
-      expect(res.body).toEqual(testData)
+
+      await Videogames.insert(testData);
+      const res = await request(server).get('/games');
+
+      expect(res.body).toEqual([testData])
    })
 })
 
@@ -40,7 +44,7 @@ describe('POST /games', () => {
       await db('videogames').truncate();
    });
 
-   it('should return status 201 when data correct', async () => {
+   it('should return status 201 when req.body contains required data', async () => {
       const res = await request(server)
          .post('/games')
          .send({ title: 'Pacman', genre: 'Arcade', releaseYear: 1980 })
@@ -48,7 +52,7 @@ describe('POST /games', () => {
       expect(res.status).toBe(201);
    })
 
-   it('should return status 422 when data incorrect', async () => {
+   it('should return status 422 when req.body does not contain required data', async () => {
       const res = await request(server)
          .post('/games')
          .send({ title: 'Pacman', releaseYear: 1980 })

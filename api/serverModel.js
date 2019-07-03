@@ -6,7 +6,7 @@ module.exports = {
 }
 
 async function insert(videogame) {
-   return null;
+   return db('videogames').insert(videogame);
 }
 
 function get() {
