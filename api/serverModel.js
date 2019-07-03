@@ -10,5 +10,5 @@ async function insert(videogame) {
 }
 
 function get() {
-   return null;
+   return db('videogames');
 }
